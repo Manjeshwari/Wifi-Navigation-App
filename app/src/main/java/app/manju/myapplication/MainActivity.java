@@ -35,11 +35,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button Guess = (Button) findViewById(R.id.guessButton);
         Button Scan = (Button) findViewById(R.id.button2);
         Button Build = (Button) findViewById(R.id.dbButton);
+        Button Map = (Button) findViewById(R.id.mapbutton);
         Guess.setOnClickListener(this);
         Scan.setOnClickListener(this);
         Build.setOnClickListener(this);
+        Map.setOnClickListener(this);
 
-        RoomNumber.setText(" ");
+
+        RoomNumber.setText("");
+        String room = RoomNumber.getText().toString();
+        //for(int i=0;i<5;i++) {
+            //startActivity(new Intent(MainActivity.this, WifiScannerActivity.class));
+        //}
+        //EditText RoomNumber = (EditText) findViewById(R.id.RoomeditText);
+
     }
 
     @Override
@@ -50,15 +59,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(WifiData);
                 break;
             case R.id.button2:
-                Intent intent = new Intent(getApplicationContext(), WifiScannerActivity.class);
+
                 EditText RoomNumber = (EditText) findViewById(R.id.RoomeditText);
+
                 String room = RoomNumber.getText().toString();
-                intent.putExtra("RoomNumber", room);
-                startActivity(intent);
+                if(room.length()==0)
+                {
+                    RoomNumber.setError("Please enter the Room Number");
+
+                    }else {
+                    Intent intent = new Intent(getApplicationContext(), WifiScannerActivity.class);
+                    intent.putExtra("RoomNumber", room);
+                    for (int i = 0; i < 25; i++) {
+                        startActivity(intent);
+                    }
+                }
+
                 break;
             case R.id.dbButton:
                 Intent DB = new Intent(MainActivity.this,DatabaseActivity.class);
                 startActivity(DB);
+                break;
+            case R.id.mapbutton:
+
+                String closestRoom = GuessActivity.ClosestRoom;
+                Intent mapIntent = new Intent(MainActivity.this,MapActivity.class);
+                mapIntent.putExtra("Source",closestRoom);
+                System.out.println(closestRoom);
+                startActivity(mapIntent);
+                //break;
         }
     }
 

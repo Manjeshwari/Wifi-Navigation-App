@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +38,15 @@ public class GuessActivity<pubilc> extends AppCompatActivity {
     private ArrayList<String> routerinfo = new ArrayList<String>();
     private ArrayAdapter adapter;
     String result = "";
+    static String ClosestRoom ="";
+
 
     HashMap<String, String> sampleHashMap = new HashMap<String, String>();
 
     List<String> sampleList = new ArrayList<String>();
     List<String> linesplit = new ArrayList<>();
+    static List<Double> roomdistance = new ArrayList<>();
+    static HashMap<String, Double> roomdistanceHashMap = new HashMap<>();
    // List<Double> roomdistance = new ArrayList<>();
     //HashMap<String, Double> roomdistanceHashMap = new HashMap<>();
     //List<Double> roomdistancevalues = new ArrayList<>(roomdistanceHashMap.values());
@@ -53,7 +58,12 @@ public class GuessActivity<pubilc> extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guess);
-     TextView Guess=(TextView) findViewById(R.id.GuesstextView);
+        EditText Guess =(EditText) findViewById(R.id.GuessEditText);
+     TextView Guess1=(TextView) findViewById(R.id.GuesstextView);
+
+        Guess1.setText("Closest Room is "+ClosestRoom);
+        Guess.setText(ClosestRoom);
+
         GuesswifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if(!GuesswifiManager.isWifiEnabled()) {
             Toast.makeText(this, "WiFi is disabled....Need to enable it", Toast.LENGTH_LONG).show();
@@ -125,7 +135,10 @@ public class GuessActivity<pubilc> extends AppCompatActivity {
             //findroom();
         }
     };
-public void readGuessFile(){
+
+    
+   public void readGuessFile()
+   {
     try {
         File samplefilename = new File(Environment.getExternalStorageDirectory(), "guessScan.txt");
         Scanner samplescanner = new Scanner(samplefilename);
@@ -182,8 +195,8 @@ public void readGuessFile(){
         }
 
         public void roomdistance() {
-            List<Double> roomdistance = new ArrayList<>();
-            HashMap<String, Double> roomdistanceHashMap = new HashMap<>();
+            //List<Double> roomdistance = new ArrayList<>();
+            //HashMap<String, Double> roomdistanceHashMap = new HashMap<>();
             List<HashMap<String, ArrayList<String>>> DBroomdict = new ArrayList(DatabaseActivity.roomdatabasedict.values());
             List<String> samplekey = new ArrayList(sampleHashMap.keySet());
              System.out.println("Size of Sampledict: " +sampleHashMap.size());
@@ -235,20 +248,25 @@ public void readGuessFile(){
 
                 System.out.println(roomdistanceHashMap);
 
-                List<Double> roomdistancevalues = new ArrayList<>(roomdistanceHashMap.values());
+
+                ArrayList<Double> roomdistancevalues = new ArrayList<>(roomdistanceHashMap.values());
                 Collections.sort(roomdistancevalues);
                 System.out.println(roomdistancevalues);
-                // get the key for the lowest values from roomdistanceHashMap
 
+                // get the key for the lowest value from roomdistanceHashMap
                 for (
                         Map.Entry<String, Double> entry : roomdistanceHashMap.entrySet()) {
+
                     if (entry.getValue().equals(roomdistancevalues.get(0))) {
+                       ClosestRoom = entry.getKey();
                         System.out.println("closest match is room : " + entry.getKey());
-                        Toast.makeText(getApplicationContext(), "Closest room is: "+entry.getKey(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Closest room is: "+entry.getKey(),Toast.LENGTH_LONG).show();
+
                     }
 
+
                 }
-                System.out.println(DatabaseActivity.roomList);
+                //System.out.println(DatabaseActivity.roomList);
                 System.out.println("No.of routers not in sample but present in Database: " + routerNotinSample);
 
             }

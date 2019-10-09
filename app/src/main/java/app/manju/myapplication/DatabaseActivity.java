@@ -30,18 +30,24 @@ public class DatabaseActivity extends AppCompatActivity {
     static HashMap<String, HashMap<String, List<String>>> roomdatabasedict = new HashMap<>();
     static HashMap<String, String> routerlistdict = new HashMap<>();
     static List<String> roomList = new ArrayList<>();
+    TextView dBmsg;
+    String message="";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
+        dBmsg = (TextView)  findViewById(R.id.dBmsg);
+
 
         readFile();
         roomdictionary();
         roomdatabasedict();
         routerlistdict();
+        //dBmsg.setText("Database  Created Successfully");
         Toast.makeText(getApplicationContext(), "Database Created Sucessfully", Toast.LENGTH_SHORT).show();
+
     }
 
     public void readFile() {
@@ -77,7 +83,7 @@ public class DatabaseActivity extends AppCompatActivity {
             roomdict.get(roomnumber).add(samplelement);
         }
 
-        System.out.println("roomdict: " + roomdict);
+       // System.out.println("roomdict: " + roomdict);
     }
 
     /******************Complete Database********************/
@@ -123,10 +129,10 @@ public class DatabaseActivity extends AppCompatActivity {
         List<String> router = new ArrayList<String>(routerlistdict.keySet());
         // System.out.println(router);
         // System.out.println(roomdatabasedict.values());
-        int maxsamples,howmanysamples;
+       int maxsamples,howmanysamples;
         List<HashMap<String, ArrayList<String>>> routersignalHashMap = new ArrayList(roomdatabasedict.values());
         //System.out.println(routersignalHashMap);
-        System.out.println("Size of unpadded RoutersignalHashMap"+routersignalHashMap.size());
+        //System.out.println("Size of unpadded RoutersignalHashMap"+routersignalHashMap.size());
         for(int i=0;i<roomList.size();i++) {
             maxsamples=0;
             //howmanysamples=0;
@@ -139,7 +145,7 @@ public class DatabaseActivity extends AppCompatActivity {
                 }
 
             }
-            System.out.println("maxsamples for room "+roomList.get(i)+"is "+maxsamples);
+            //System.out.println("maxsamples for room "+roomList.get(i)+"is "+maxsamples);
 
             for(int k=0;k<signaList.size();k++) {
                 howmanysamples=signaList.get(k).size();
@@ -252,7 +258,7 @@ public class DatabaseActivity extends AppCompatActivity {
             //System.out.println(roomList.get(i)+ avgroomdict.get(i));
         }
 
-       // System.out.println("Complete Database after Average: " + roomdatabasedict);
+        System.out.println("Complete Database after Average: " + roomdatabasedict);
     }
 
     public void routerlistdict(){
@@ -279,7 +285,7 @@ public class DatabaseActivity extends AppCompatActivity {
 
             }
         }
-        System.out.println("Routerlistdict: "+ routerlistdict);
+       // System.out.println("Routerlistdict: "+ routerlistdict);
     }
 
 
