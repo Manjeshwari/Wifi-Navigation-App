@@ -1,11 +1,16 @@
 package app.manju.myapplication;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +30,13 @@ public class MapActivity extends AppCompatActivity {
     EditText Destination;
     Button Map;
     Button Cancel;
-    TextView mapView;
+    TextView mapView, seekBarTextView;
+    SeekBar seekBar;
+    //ProgressBar progressBar;
+    int progress;
+    Context mContext;
+
+
     static List<String> adjacentRoomList = new ArrayList<>();
     static LinkedList<Node> stack;
     static LinkedList<String> nearestneighbor;
@@ -153,9 +164,9 @@ public class MapActivity extends AppCompatActivity {
         stack = new LinkedList<>();
 
         //adding node of startId in the linkedlist
-        System.out.println("Source"+source);
+        System.out.println("Source: "+source);
         queue.add(getNode(graph, source));
-        System.out.println("Queue"+queue);
+        System.out.println("Queue: "+queue);
 
         parentidString+=source+"--->";
 
@@ -188,6 +199,7 @@ public class MapActivity extends AppCompatActivity {
                         System.out.println("CurrentRoom: "+currentparent.getId());
                         //String output = " ";
                         output+= currentparent.getId()+ " <--- ";
+
 //				current=stack.pop();
                     }while(!stack.isEmpty());
                 }
@@ -206,7 +218,7 @@ public class MapActivity extends AppCompatActivity {
                 String[] childString= children.toString().split(" ");
 
                 String childList= Arrays.toString(childString);
-                System.out.println("Children : "+childList);
+                //System.out.println("Children : "+childList);
                 //System.out.println("Contains Destination: "+childList.contains(destination));
                 if(childList.contains(destination)==true) {
                     parentidString+=parent.getId()+"--->";
@@ -214,6 +226,9 @@ public class MapActivity extends AppCompatActivity {
                     nearestneighbor.push(parent.getId());
 
 
+                } else{
+                    //System.out.println("No Appropriate Map found. Sorry for the inconvenience caused");
+                    //output="No Appropriate Map found. Sorry for the inconvenience caused!!!";
                 }
 
 
@@ -269,9 +284,10 @@ public class MapActivity extends AppCompatActivity {
 
                         distance += Math.pow((FromSignal - ToSignal), 2);
                     }
-                  //  System.out.println(distance);
+                    //System.out.println("Distance from "+roomkeyFrom+" to "+roomkeyTo+" is " +distance);
 
                 }
+                System.out.println("Distance from "+dBKeys.get(i)+" to "+dBKeys.get(j)+" is " +distance);
 
                 if(distance==0.0) {
 
@@ -295,8 +311,11 @@ public class MapActivity extends AppCompatActivity {
                     //System.out.println("Smallest distance is "+oldDistance);
                 }
 
+                System.out.println("This is the progress value"+ progress);
 
                 if(distance<7000 && distance!=0.0) {
+
+
 
                     // System.out.println("Room "+dBKeys.get(i)+" is connected to "+dBKeys.get(j));
 
@@ -312,8 +331,42 @@ public class MapActivity extends AppCompatActivity {
             // System.out.println("Smallest distance is "+oldDistance);
 
         }
-       // System.out.println(adjacentRoomList);
+        System.out.println(adjacentRoomList);
 
+
+    }
+    private void bindViews() {
+        seekBar =(SeekBar) findViewById(R.id.seekBar);
+        seekBarTextView =(TextView) findViewById(R.id.seekBarTextView);
+        //progressBar=(ProgressBar) findViewById(R.id.progressBar);
+        seekBar.setMax(15000);
+        seekBar.setProgress(1000);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+
+                seekBarTextView.setText(" " + progress + "  / 15000 ");
+
+
+
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+                Toast.makeText(mContext, "Touch SeekBar", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+                Toast.makeText(mContext, "let go SeekBar", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -327,11 +380,21 @@ public class MapActivity extends AppCompatActivity {
         Map = (Button) findViewById(R.id.mapButton);
         Cancel=(Button) findViewById(R.id.cancel);
         mapView = (TextView) findViewById(R.id.MapView);
+        mContext=MapActivity.this;
+        //seekBar =(SeekBar) findViewById(R.id.seekBar);
+        //seekBarTextView =(TextView) findViewById(R.id.seekBarTextView);
 
+        //progressBar=(ProgressBar) findViewById(R.id.progressBar);
+        //seekBar.setMax(1000);
+        //seekBar.setProgress(100);
+        //seekBar.animate();
+
+        bindViews();
         distanceCalculation();
-
         System.out.println("-----------------------------------");
-        //distanceCalculation();
+        //seekBar functionality
+
+
 
 
 

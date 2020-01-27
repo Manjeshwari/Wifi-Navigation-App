@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-public class DatabaseActivity extends AppCompatActivity {
+public class DatabaseActivity extends AppCompatActivity{
 
     List<String> rooms = new ArrayList<String>();
     HashMap<String, List<String>> roomdict = new HashMap<String, List<String>>();
@@ -49,6 +49,10 @@ public class DatabaseActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Database Created Sucessfully", Toast.LENGTH_SHORT).show();
 
     }
+   /* @Override
+    public void run(){
+        roomdatabasedict();
+    }*/
 
     public void readFile() {
         try {
@@ -88,177 +92,250 @@ public class DatabaseActivity extends AppCompatActivity {
 
     /******************Complete Database********************/
     public void roomdatabasedict() {
-        roomList.addAll(roomdict.keySet());
-        System.out.println(roomList);
 
-        for (int i = 0; i < roomList.size(); i++) {
-            String room = roomList.get(i);
+       /* while (true) {
 
-            HashMap<String, List<String>> roomrouterdict = new HashMap<>();
+            System.out.println("Hello");
 
-            if (roomdict.containsKey(room)) {
-                List<String> roomreading = new ArrayList<>();// List of all the routersignal pairs for each room from the roomdict
-                roomreading.addAll(roomdict.get(room));
-                for (int j = 0; j < roomreading.size(); j++) {
-                    List<String> reading = Arrays.asList(roomreading.get(j).split(" "));
+            try {
+                Thread.sleep(10000);*/
 
+                roomList.addAll(roomdict.keySet());
+                System.out.println(roomList);
 
-                    for (int k = 0; k < reading.size() - 1; k += 2) {
-                        String routerid = reading.get(k);
+                for (int i = 0; i < roomList.size(); i++) {
+                    String room = roomList.get(i);
 
-                        if (roomrouterdict.containsKey(routerid)) {
+                    HashMap<String, List<String>> roomrouterdict = new HashMap<>();
 
-                        } else {
-                            roomrouterdict.put(routerid, new ArrayList<String>());
-                        }
-                        String signalStrength = reading.get(k + 1);
-                        roomrouterdict.get(routerid).add(signalStrength);
-                    }
-                }
-
-                roomdatabasedict.put(room, roomrouterdict);
-            }
-
-        }
-        //System.out.println("Complete database "+" : "+roomdatabasedict);
-
-        /********************************
-         * #go through each router and see if it needs padding
-         ***********************/
-
-        List<String> router = new ArrayList<String>(routerlistdict.keySet());
-        // System.out.println(router);
-        // System.out.println(roomdatabasedict.values());
-       int maxsamples,howmanysamples;
-        List<HashMap<String, ArrayList<String>>> routersignalHashMap = new ArrayList(roomdatabasedict.values());
-        //System.out.println(routersignalHashMap);
-        //System.out.println("Size of unpadded RoutersignalHashMap"+routersignalHashMap.size());
-        for(int i=0;i<roomList.size();i++) {
-            maxsamples=0;
-            //howmanysamples=0;
-            List<ArrayList<String>> signaList=new ArrayList<ArrayList<String>>(routersignalHashMap.get(i).values());
-            for(int j=0;j<signaList.size();j++) {
-
-                howmanysamples=signaList.get(j).size();
-                if(howmanysamples>maxsamples) {
-                    maxsamples=howmanysamples;
-                }
-
-            }
-            //System.out.println("maxsamples for room "+roomList.get(i)+"is "+maxsamples);
-
-            for(int k=0;k<signaList.size();k++) {
-                howmanysamples=signaList.get(k).size();
-                if(howmanysamples<maxsamples) {
-                    int pad=maxsamples-howmanysamples;
-                    //System.out.println(pad);
-                    String padList = "";
-                    //padList+=padList;
-                    //signaList.get(k).add(padList);
-
-                    HashMap<String, ArrayList<String>> individualroomdict= new HashMap<>(routersignalHashMap.get(i));
-                    //System.out.println(individualroomdict);
-
-                    for(int m=0;m<pad;m++) {
-
-                        padList="-100";
-                        signaList.get(k).add(padList);
-                    }
+                    if (roomdict.containsKey(room)) {
+                        List<String> roomreading = new ArrayList<>();// List of all the routersignal pairs for each room from the roomdict
+                        roomreading.addAll(roomdict.get(room));
+                        for (int j = 0; j < roomreading.size(); j++) {
+                            List<String> reading = Arrays.asList(roomreading.get(j).split(" "));
 
 
-                }
-            }
-        }
-/********************************PADDED DICTIONARY***********************/
+                            for (int k = 0; k < reading.size() - 1; k += 2) {
+                                String routerid = reading.get(k);
 
-        //HashMap<String, HashMap<String, List<String>>> paddeddictionary=new HashMap<String, HashMap<String, List<String>>>();
-        List<HashMap<String, ArrayList<String>>> Allroomdict= new ArrayList(roomdatabasedict.values());
+                                if (roomrouterdict.containsKey(routerid)) {
 
-        for(
-                int i = 0;i<roomList.size();i++)
-        {
-            HashMap<String, List<String>> individualroomdict = new HashMap<String, List<String>>( Allroomdict.get(i));
-            // System.out.println(individualroomdict);
-
-            for (int j = 0; j < router.size(); j++) {
-                if (!individualroomdict.containsKey(router.get(j))) {
-                    // System.out.println(router.get(j));
-                    individualroomdict.put(router.get(j), new ArrayList<String>());
-                    String padString = "-100";
-                    individualroomdict.get(router.get(j)).add("-100");
-                    // System.out.println(individualroomdict.get(router.get(j)));
-                    for (int k = 0; k > routerlistdict.size(); k++) {
-                        if (roomdatabasedict.containsKey(roomList.get(i))) {
-                            System.out.println("roomlist: " + roomList.get(i));
-                            if ( Allroomdict.get(i).containsKey(router.get(j))) {
+                                } else {
+                                    roomrouterdict.put(routerid, new ArrayList<String>());
+                                }
+                                String signalStrength = reading.get(k + 1);
+                                roomrouterdict.get(routerid).add(signalStrength);
                             }
                         }
+
+                        roomdatabasedict.put(room, roomrouterdict);
                     }
+                    System.out.println("#########No.of routers" + roomrouterdict.size());
 
                 }
-            }
-            // System.out.println(individualroomdict);
-            roomdatabasedict.put(roomList.get(i), individualroomdict);
-        }
-//System.out.println(paddeddictionary);
-       // System.out.println("New: "+ roomdatabasedict);
-        // /******************************** AVERAGED DATABASE ***********************/
+                System.out.println("Complete database "+" : "+roomdatabasedict);
 
-        HashMap<String, HashMap<String, ArrayList<String>>> averageddatabase = new HashMap<String, HashMap<String, ArrayList<String>>>();
-        List<HashMap<String, ArrayList<String>>> avgroomdict = new ArrayList(roomdatabasedict.values());
-        double sum = 0;
-        int counter = 0;
-        double average;
-        for(int i = 0;i<roomList.size();i++)
-        {
-            HashMap<String, ArrayList<String>> avgHashMap = new HashMap(avgroomdict.get(i));
-            ArrayList list = new ArrayList(avgHashMap.values());
 
-            average = 0;
-            for (int j = 0; j < list.size(); j++) {
-                List<String> sampleList2 = new ArrayList();
-                sampleList2.addAll((Collection<? extends String>) list.get(j));
-                Collections.sort(sampleList2);
-                // System.out.println("This is "+sampleList2);
-                // System.out.println(Collections.sort(sampleList2));
-                sum = 0;
-                int count = 0;
+                /********************************
+                 * #go through each router and see if it needs padding
+                 ***********************/
 
-                for (int k = 0; k < sampleList2.size(); k++) {
-                    // System.out.println(sampleList2.get(k));
-                    sum = sum + Integer.parseInt(sampleList2.get(k));
-                    // System.out.println(sum);
-                    count += 1;
-                    // System.out.println(count);
-                }
-                counter = count;
-                // System.out.println(counter);
-                average =(sum / count);
-                // System.out.println(average);
-                // System.out.println(count);
-                if (counter > 1) {
-                    String averageString = Double.toString(average);
-                    List<String> averageList = new ArrayList<>();
-                    averageList.add(averageString);
-                    // System.out.println(avgroomdict.get(i).containsValue(sampleList.get(i)));
-                    for (Entry<String, ArrayList<String>> entry : (avgroomdict.get(i)).entrySet()) {
-                        if (entry.getValue().equals(list.get(j))) {
-                            // System.out.println(entry.getKey());
+                List<String> router = new ArrayList<String>(routerlistdict.keySet());
+                // System.out.println(router);
+                // System.out.println(roomdatabasedict.values());
+                int maxsamples, howmanysamples;
+                List<HashMap<String, ArrayList<String>>> routersignalHashMap = new ArrayList(roomdatabasedict.values());
+                //System.out.println(routersignalHashMap);
+                //System.out.println("Size of unpadded RoutersignalHashMap"+routersignalHashMap.size());
+                for (int i = 0; i < roomList.size(); i++) {
+                    maxsamples = 0;
+                    //howmanysamples=0;
+                    List<ArrayList<String>> signaList = new ArrayList<ArrayList<String>>(routersignalHashMap.get(i).values());
+                    for (int j = 0; j < signaList.size(); j++) {
 
-                            avgroomdict.get(i).replace(entry.getKey(), new ArrayList<String>());
-                            avgroomdict.get(i).put(entry.getKey(), (ArrayList<String>) averageList);
+                        howmanysamples = signaList.get(j).size();
+                        if (howmanysamples > maxsamples) {
+                            maxsamples = howmanysamples;
                         }
 
                     }
+                    //System.out.println("maxsamples for room "+roomList.get(i)+"is "+maxsamples);
+
+                    for (int k = 0; k < signaList.size(); k++) {
+                        howmanysamples = signaList.get(k).size();
+                        if (howmanysamples < maxsamples) {
+                            int pad = maxsamples - howmanysamples;
+                            //System.out.println(pad);
+                            String padList = "";
+                            //padList+=padList;
+                            //signaList.get(k).add(padList);
+
+                            HashMap<String, ArrayList<String>> individualroomdict = new HashMap<>(routersignalHashMap.get(i));
+                            //System.out.println(individualroomdict);
+
+                            for (int m = 0; m < pad; m++) {
+
+                                padList = "-100";
+                                signaList.get(k).add(padList);
+                            }
+
+
+                        }
+                    }
                 }
 
-                averageddatabase.put(roomList.get(i), avgroomdict.get(i));
+/********************************PADDED DICTIONARY***********************/
 
+                //HashMap<String, HashMap<String, List<String>>> paddeddictionary=new HashMap<String, HashMap<String, List<String>>>();
+                List<HashMap<String, ArrayList<String>>> Allroomdict = new ArrayList(roomdatabasedict.values());
+
+                for (
+                        int i = 0; i < roomList.size(); i++) {
+                    HashMap<String, List<String>> individualroomdict = new HashMap<String, List<String>>(Allroomdict.get(i));
+                    // System.out.println(individualroomdict);
+
+                    for (int j = 0; j < router.size(); j++) {
+                        if (!individualroomdict.containsKey(router.get(j))) {
+                            // System.out.println(router.get(j));
+                            individualroomdict.put(router.get(j), new ArrayList<String>());
+                            String padString = "-100";
+                            individualroomdict.get(router.get(j)).add("-100");
+                            // System.out.println(individualroomdict.get(router.get(j)));
+                            for (int k = 0; k > routerlistdict.size(); k++) {
+                                if (roomdatabasedict.containsKey(roomList.get(i))) {
+                                    System.out.println("roomlist: " + roomList.get(i));
+                                    if (Allroomdict.get(i).containsKey(router.get(j))) {
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    // System.out.println(individualroomdict);
+                    roomdatabasedict.put(roomList.get(i), individualroomdict);
+                }
+//k
+// kSystem.out.println(paddeddictionary);
+                // System.out.println("New: "+ roomdatabasedict);
+
+                /********************************MEDIAN DATABASE***********************/
+
+       /* HashMap<String, HashMap<String, ArrayList<String>>> averageddatabase=new HashMap<String, HashMap<String, ArrayList<String>>>();
+
+        List<HashMap<String,ArrayList<String>>> avgroomdict= new ArrayList(roomdatabasedict.values());
+        int sum=0;
+        int counter=0;
+        int  median=0;
+        for(int i=0;i<roomList.size();i++)
+        {
+            HashMap<String, ArrayList<String>> avgHashMap= new HashMap(avgroomdict.get(i));
+            ArrayList list=new ArrayList(avgHashMap.values());
+            median=0;
+            for(int j=0; j<list.size();j++)
+            {
+                List<String> sampleList2=new ArrayList();
+                sampleList2.addAll((Collection<? extends String>) list.get(j));
+                Collections.sort(sampleList2);
+                //System.out.println("This is "+sampleList2);
+                int size=sampleList2.size();
+
+                if(size==2){
+                    median =(Integer.parseInt(sampleList2.get(0))+Integer.parseInt(sampleList2.get(1)))/2;
+                    // System.out.println("Median: "+median);
+                }else if (size==1){
+                    median =(Integer.parseInt(sampleList2.get(0)));
+                    //System.out.println("Median: "+median);
+                }else if(size%2==0)
+                {
+                    median =(Integer.parseInt(sampleList2.get((size/2)-1))+Integer.parseInt((sampleList2.get((size/2)+1))))/2;
+                    //System.out.println("Median: "+median);
+                }
+                else if(size%2!=0){
+                    median=(int) Math.ceil(Integer.parseInt(sampleList2.get(size/2)));
+                    // System.out.println("Median: "+median);
+                }
+                String averageString=Integer.toString(median);
+                List<String> averageList= new ArrayList<>();
+                averageList.add(averageString);
+                //System.out.println(avgroomdict.get(i).containsValue(sampleList.get(i)));
+                for(Entry<String, ArrayList<String>> entry: (avgroomdict.get(i)).entrySet()) {
+                    if(entry.getValue().equals(list.get(j))) {
+                        //System.out.println(entry.getKey());
+                        avgroomdict.get(i).replace(entry.getKey(), new ArrayList<String>());
+                        avgroomdict.get(i).put(entry.getKey(), (ArrayList<String>) averageList);
+                    }
+
+                }
             }
-            //System.out.println(roomList.get(i)+ avgroomdict.get(i));
+
+            averageddatabase.put(roomList.get(i),avgroomdict.get(i));
         }
 
-        System.out.println("Complete Database after Average: " + roomdatabasedict);
+        //System.out.println("Average roomdict: "+avgroomdict);
+        //System.out.println(roomList);
+        System.out.println("Averaged Database: " + averageddatabase);*/
+
+                // /******************************** AVERAGED DATABASE ***********************/
+
+                HashMap<String, HashMap<String, ArrayList<String>>> averageddatabase = new HashMap<String, HashMap<String, ArrayList<String>>>();
+                List<HashMap<String, ArrayList<String>>> avgroomdict = new ArrayList(roomdatabasedict.values());
+                double sum = 0;
+                int counter = 0;
+                double average;
+                for (int i = 0; i < roomList.size(); i++) {
+                    HashMap<String, ArrayList<String>> avgHashMap = new HashMap(avgroomdict.get(i));
+                    ArrayList list = new ArrayList(avgHashMap.values());
+
+                    average = 0;
+                    for (int j = 0; j < list.size(); j++) {
+                        List<String> sampleList2 = new ArrayList();
+                        sampleList2.addAll((Collection<? extends String>) list.get(j));
+                        Collections.sort(sampleList2);
+                        // System.out.println("This is "+sampleList2);
+                        // System.out.println(Collections.sort(sampleList2));
+                        sum = 0;
+                        int count = 0;
+
+                        for (int k = 0; k < sampleList2.size(); k++) {
+                            // System.out.println(sampleList2.get(k));
+                            sum = sum + Integer.parseInt(sampleList2.get(k));
+                            // System.out.println(sum);
+                            count += 1;
+                            // System.out.println(count);
+                        }
+                        counter = count;
+                        // System.out.println(counter);
+                        average = (sum / count);
+                        // System.out.println(average);
+                        // System.out.println(count);
+                        if (counter > 1) {
+                            String averageString = Double.toString(average);
+                            List<String> averageList = new ArrayList<>();
+                            averageList.add(averageString);
+                            // System.out.println(avgroomdict.get(i).containsValue(sampleList.get(i)));
+                            for (Entry<String, ArrayList<String>> entry : (avgroomdict.get(i)).entrySet()) {
+                                if (entry.getValue().equals(list.get(j))) {
+                                    // System.out.println(entry.getKey());
+
+                                    avgroomdict.get(i).replace(entry.getKey(), new ArrayList<String>());
+                                    avgroomdict.get(i).put(entry.getKey(), (ArrayList<String>) averageList);
+                                }
+
+                            }
+                        }
+
+                        averageddatabase.put(roomList.get(i), avgroomdict.get(i));
+
+                    }
+                    //System.out.println(roomList.get(i)+ avgroomdict.get(i));
+                }
+
+                //System.out.println("Complete Database after Average: " + roomdatabasedict);
+            /*}catch(InterruptedException e){
+
+            }
+
+        }*/
     }
 
     public void routerlistdict(){

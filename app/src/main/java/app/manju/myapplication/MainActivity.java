@@ -8,19 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
 
-    /*public void ClickFunction(View view) {
-
-        EditText RoomNumber = (EditText) findViewById(R.id.RoomeditText);
-        Log.i("Info", "Button pressed!");
-        Log.i("Values", RoomNumber.getText().toString());
-        String room = RoomNumber.getText().toString();
-        //HashMap<String, String> map = new HashMap<String, String>();
-        //map.put("RoomNumber", RoomNumber.getText().toString());
-        Toast.makeText(this, "Saved Sucessfully", Toast.LENGTH_SHORT).show();
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +30,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Scan.setOnClickListener(this);
         Build.setOnClickListener(this);
         Map.setOnClickListener(this);
-
-
         RoomNumber.setText("");
         String room = RoomNumber.getText().toString();
-        //for(int i=0;i<5;i++) {
-            //startActivity(new Intent(MainActivity.this, WifiScannerActivity.class));
-        //}
-        //EditText RoomNumber = (EditText) findViewById(R.id.RoomeditText);
+
 
     }
+
 
     @Override
     public void onClick(View v) {
